@@ -59,8 +59,10 @@ public class MokshaPatamTest {
             boardsize = Integer.parseInt(testReader.readLine());
 
             // Read in the data for each test, then run.
+
             for (int i = 0; i < numTests; i++)
             {
+                System.out.println("\n testing number " + testNumber);
                 int answer = Integer.parseInt(answerReader.readLine());
                 loadTest(testReader);
                 assertEquals(answer, studentSolution.fewestMoves(boardsize, ladders, snakes),
