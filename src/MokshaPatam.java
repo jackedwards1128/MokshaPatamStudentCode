@@ -20,47 +20,40 @@ public class MokshaPatam {
 
         int position = boardsize;
 
-        int ladderScores[] = new int[ladders.length];
+        // Create node array
+        Node[] nodes = new Node[boardsize];
 
-        while (true) {
-            System.out.println("position: " + position + "     rolls: " + rolls);
-            int bestScore = Integer.MIN_VALUE;
-            int bestScoreIndex = -1;
-            for (int i = 0; i < ladders.length; i++) {
-                if (ladders[i][1] > position)
-                    continue;
-
-                int lengthRolls = (int) Math.ceil((ladders[i][1] - ladders[i][0]) / 6);
-                int distanceRolls = (int) Math.ceil((position - ladders[i][1]) / 6);
-                int score = lengthRolls - distanceRolls;
-                ladderScores[i] = score;
-
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestScoreIndex = i;
+        for (int i = 1; i <= boardsize; i++) {
+            // Set destinations for snakes/ladders
+            int direct_travel = -1;
+            for (int ladder[] : ladders) {
+                if (ladder[0] == i) {
+                    direct_travel = ladder[1];
                 }
             }
-            if (bestScoreIndex == -1) {
-                System.out.println("breaking; pos: " + position);
-                break;
+            if (direct_travel != -1) {
+                for (int snake[] : snakes) {
+                    if (snake[0] == i) {
+                        direct_travel = snake[1];
+                        System.out.println(snake[0]);
+                    }
+                }
             }
-            System.out.println("next ladder: " + ladders[bestScoreIndex][1]);
-            rolls += (int) Math.ceil((position - ladders[bestScoreIndex][1]) / 6.0);
-            position = ladders[bestScoreIndex][0];
+            // Add node to array
+            nodes[i-1] = new Node(i, direct_travel, boardsize);
         }
 
-        rolls += (int) Math.ceil((position - 1) / 6.0);
-        // Start at finishing square (work backwards)
-        // Ladder score = ceiling(length / 6) - ceiling(distance away from player - 6)
-        // find all ladder scores
-        // find ladder with highest score
-        // roll to that ladder
-        // go down it
-        // repeat
-        // profit
+        for (Node node : nodes) {
+            node.setNodes(nodes);
+            node.setEdges();
+        }
 
-        System.out.println("ROLLS " + rolls);
-        return rolls;
+        System.out.println("hello");
+
+        Searcher search = new Searcher();
+
+        return search.InitiateSearch(boardsize, nodes);
     }
+
 
 }
