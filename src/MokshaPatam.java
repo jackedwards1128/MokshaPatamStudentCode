@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Moksha Patam
  * A puzzle created by Zach Blick
@@ -30,38 +33,56 @@ public class MokshaPatam {
 //        }
 
         // Create node array
-        Node[] nodes = new Node[boardsize];
+        int[] nodes = new int[boardsize+1];
+        int[] map = new int[boardsize+1];
 
         for (int i = 1; i <= boardsize; i++) {
             // Set destinations for snakes/ladders
-            int direct_travel = -1;
             for (int ladder[] : ladders) {
                 if (ladder[0] == i) {
-                    direct_travel = ladder[1];
+                    map[i] = ladder[1];
                 }
             }
-            if (direct_travel == -1) {
+            if (map[i] == 0) {
                 for (int snake[] : snakes) {
                     if (snake[0] == i) {
-                        direct_travel = snake[1];
+                        map[i] = snake[1];
                         System.out.println(snake[0]);
                     }
                 }
             }
-            // Add node to array
-            nodes[i-1] = new Node(i, direct_travel, boardsize);
-        }
 
-        for (Node node : nodes) {
-            node.setNodes(nodes);
-            node.setEdges();
+            if (map[i] == 0) {
+                map[i] = i;
+            }
+
+            nodes[i] = i;
         }
 
         System.out.println("hello");
 
-        Searcher search = new Searcher();
+        Queue<Integer> queue = new LinkedList<Integer>();
+        boolean[] visited = new boolean[boardsize+1];
+        int[] traveltime = new int[boardsize+1];
 
-        return search.InitiateSearch(boardsize, nodes);
+        queue.add(1);
+
+        while(!(queue.isEmpty())) {
+            int current = queue.remove();
+            if (current == boardsize) {
+                return traveltime[current];
+            }
+            for(int i = 1; (i <= 6) && (current + i <= boardsize); i++) {
+                if (!visited[current+i]) {
+                    visited[current+i] = true;
+                    visited[map[current+i]] = true;
+                    traveltime[map[current+i]] = traveltime[current] + 1;
+                    queue.add(map[current+i]);
+                }
+            }
+        }
+
+        return -1;
     }
 
 
