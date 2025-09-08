@@ -20,6 +20,15 @@ public class MokshaPatam {
 
         int position = boardsize;
 
+//        System.out.println("Ladders:");
+//        for (int ladder[] : ladders) {
+//            System.out.println(ladder[0] + " -> " + ladder[1]);
+//        }
+//        System.out.println("Snakes:");
+//        for (int snake[] : snakes) {
+//            System.out.println(snake[0] + " -> " + snake[1]);
+//        }
+
         // Create node array
         Node[] nodes = new Node[boardsize];
 
@@ -31,7 +40,7 @@ public class MokshaPatam {
                     direct_travel = ladder[1];
                 }
             }
-            if (direct_travel != -1) {
+            if (direct_travel == -1) {
                 for (int snake[] : snakes) {
                     if (snake[0] == i) {
                         direct_travel = snake[1];
